@@ -25,33 +25,33 @@
 using namespace Onion;
 
 Module *activateModule(const QStringList &l,const QMap<QString,QString> &m){
-  foreach(QString module, l){
-    qDebug("%s:%d load module %s",__FILE__,__LINE__,(const char *)module.toAscii().data());
-    
-    void *onionmodule;
-    
+	foreach(QString module, l){
+		qDebug("%s:%d load module %s",__FILE__,__LINE__,(const char *)module.toAscii().data());
+		
+		void *onionmodule;
+		
 		if (!QFile::exists(module)){
 			QString tmodule=QString("%1/%2").arg(getenv("ONIONDIR")).arg(module);
 			if (QFile::exists(tmodule))
 				module=tmodule;
 		}
 		
-    onionmodule=dlopen((const char *)module.toAscii().data(), RTLD_NOW|RTLD_GLOBAL);
-    if (onionmodule){
-      void (*createOnionModule)(void);
-      createOnionModule=(void(*)(void))dlsym(onionmodule,"createOnionModule");
-      if (!createOnionModule){
-        qDebug("%s:%d cant load module %s! Aborting! (%s)",__FILE__,__LINE__,(const char *)module.toAscii().data(), dlerror());
-        return NULL;
-      }
-      createOnionModule();
-    }
-    else{
-      qDebug("%s:%d cant load module %s! Aborting! (%s)",__FILE__,__LINE__,(const char *)module.toAscii().data(), dlerror());
-      return NULL;
-    }
-  }
+		onionmodule=dlopen((const char *)module.toAscii().data(), RTLD_NOW|RTLD_GLOBAL);
+		if (onionmodule){
+			void (*createOnionModule)(void);
+			createOnionModule=(void(*)(void))dlsym(onionmodule,"createOnionModule");
+			if (!createOnionModule){
+				qDebug("%s:%d cant load module %s! Aborting! (%s)",__FILE__,__LINE__,(const char *)module.toAscii().data(), dlerror());
+				return NULL;
+			}
+			createOnionModule();
+		}
+		else{
+			qDebug("%s:%d cant load module %s! Aborting! (%s)",__FILE__,__LINE__,(const char *)module.toAscii().data(), dlerror());
+			return NULL;
+		}
+	}
 
-  return new Module();
+	return new Module();
 }
 
