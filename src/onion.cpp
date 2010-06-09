@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <QCoreApplication>
+#include <QStringList>
 #include <QRegExp>
 
 #include "configparser.h"
@@ -29,8 +30,14 @@
 
 int main(int argc, char **argv){
   QCoreApplication *app=new QCoreApplication(argc, argv);
-
-  Onion::Daemon d("/etc/onion+.conf");
+	QString configfile;
+	
+	if (app->arguments().length()==2)
+		configfile=app->arguments().at(1);
+	else
+		configfile="/etc/onion+.conf";
+	
+  Onion::Daemon d(configfile);
 
   app->exec();
 }
