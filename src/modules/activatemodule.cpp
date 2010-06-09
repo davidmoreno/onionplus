@@ -15,6 +15,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <QFile>
 
 #include <dlfcn.h>
 #include <stdlib.h>
@@ -29,6 +30,12 @@ Module *activateModule(const QStringList &l,const QMap<QString,QString> &m){
     
     void *onionmodule;
     
+		if (!QFile::exists(module)){
+			QString tmodule=QString("%1/%2").arg(getenv("ONIONDIR")).arg(module);
+			if (QFile::exists(tmodule))
+				module=tmodule;
+		}
+		
     onionmodule=dlopen((const char *)module.toAscii().data(), RTLD_NOW|RTLD_GLOBAL);
     if (onionmodule){
       void (*createOnionModule)(void);
