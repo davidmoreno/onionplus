@@ -50,6 +50,9 @@ Daemon::Daemon(const QString &configfile) {
 	connect(server,SIGNAL(newConnection()), this, SLOT(newConnection()));
 
 	server->listen(QHostAddress::Any, 8080);
+	qDebug("%s:%d listening %s:%d",__FILE__,__LINE__, 
+																server->serverAddress().toString().toAscii().data(),
+																server->serverPort());
 }
 
 /**
