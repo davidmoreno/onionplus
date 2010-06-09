@@ -1,0 +1,7 @@
+SCAMS=sharedlib
+
+CXXFLAGS+=-I.. -fPIC
+LDFLAGS+=-fPIC
+
+jsondirlist.so: jsondirlist.cpp jsondirlist.h
+simpledirlist.so: simpledirlist.cpp simpledirlist.h

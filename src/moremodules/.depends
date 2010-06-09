@@ -1,0 +1,76 @@
+jsondirlist.o: jsondirlist.cpp /usr/share/qt4/include/QtCore/QBuffer \
+  /usr/share/qt4/include/QtCore/qbuffer.h \
+  /usr/share/qt4/include/QtCore/qiodevice.h \
+  /usr/share/qt4/include/QtCore/qobject.h \
+  /usr/share/qt4/include/QtCore/qobjectdefs.h \
+  /usr/share/qt4/include/QtCore/qnamespace.h \
+  /usr/share/qt4/include/QtCore/qglobal.h \
+  /usr/share/qt4/include/QtCore/qconfig.h \
+  /usr/share/qt4/include/QtCore/qfeatures.h \
+  /usr/share/qt4/include/QtCore/qstring.h \
+  /usr/share/qt4/include/QtCore/qchar.h \
+  /usr/share/qt4/include/QtCore/qbytearray.h \
+  /usr/share/qt4/include/QtCore/qatomic.h \
+  /usr/share/qt4/include/QtCore/qbasicatomic.h \
+  /usr/share/qt4/include/QtCore/qatomic_arch.h \
+  /usr/share/qt4/include/QtCore/qatomic_x86_64.h \
+  /usr/share/qt4/include/QtCore/qlist.h \
+  /usr/share/qt4/include/QtCore/qiterator.h \
+  /usr/share/qt4/include/QtCore/qalgorithms.h \
+  /usr/share/qt4/include/QtCore/QDir /usr/share/qt4/include/QtCore/qdir.h \
+  /usr/share/qt4/include/QtCore/qfileinfo.h \
+  /usr/share/qt4/include/QtCore/qfile.h \
+  /usr/share/qt4/include/QtCore/qstringlist.h \
+  /usr/share/qt4/include/QtCore/qdatastream.h \
+  /usr/share/qt4/include/QtCore/qregexp.h \
+  /usr/share/qt4/include/QtCore/qstringmatcher.h \
+  /usr/share/qt4/include/QtCore/QDateTime \
+  /usr/share/qt4/include/QtCore/qdatetime.h ../modulefactory.h \
+  /usr/share/qt4/include/QtCore/QString \
+  /usr/share/qt4/include/QtCore/qstring.h \
+  /usr/share/qt4/include/QtCore/QStringList \
+  /usr/share/qt4/include/QtCore/qstringlist.h \
+  /usr/share/qt4/include/QtCore/QMap /usr/share/qt4/include/QtCore/qmap.h \
+  ../module.h /usr/share/qt4/include/QtCore/QtPlugin \
+  /usr/share/qt4/include/QtCore/qplugin.h \
+  /usr/share/qt4/include/QtCore/qpointer.h ../request.h ../response.h \
+  jsondirlist.h ../module.h
+simpledirlist.o: simpledirlist.cpp /usr/share/qt4/include/QtCore/QBuffer \
+  /usr/share/qt4/include/QtCore/qbuffer.h \
+  /usr/share/qt4/include/QtCore/qiodevice.h \
+  /usr/share/qt4/include/QtCore/qobject.h \
+  /usr/share/qt4/include/QtCore/qobjectdefs.h \
+  /usr/share/qt4/include/QtCore/qnamespace.h \
+  /usr/share/qt4/include/QtCore/qglobal.h \
+  /usr/share/qt4/include/QtCore/qconfig.h \
+  /usr/share/qt4/include/QtCore/qfeatures.h \
+  /usr/share/qt4/include/QtCore/qstring.h \
+  /usr/share/qt4/include/QtCore/qchar.h \
+  /usr/share/qt4/include/QtCore/qbytearray.h \
+  /usr/share/qt4/include/QtCore/qatomic.h \
+  /usr/share/qt4/include/QtCore/qbasicatomic.h \
+  /usr/share/qt4/include/QtCore/qatomic_arch.h \
+  /usr/share/qt4/include/QtCore/qatomic_x86_64.h \
+  /usr/share/qt4/include/QtCore/qlist.h \
+  /usr/share/qt4/include/QtCore/qiterator.h \
+  /usr/share/qt4/include/QtCore/qalgorithms.h \
+  /usr/share/qt4/include/QtCore/QDir /usr/share/qt4/include/QtCore/qdir.h \
+  /usr/share/qt4/include/QtCore/qfileinfo.h \
+  /usr/share/qt4/include/QtCore/qfile.h \
+  /usr/share/qt4/include/QtCore/qstringlist.h \
+  /usr/share/qt4/include/QtCore/qdatastream.h \
+  /usr/share/qt4/include/QtCore/qregexp.h \
+  /usr/share/qt4/include/QtCore/qstringmatcher.h \
+  /usr/share/qt4/include/QtCore/QDateTime \
+  /usr/share/qt4/include/QtCore/qdatetime.h \
+  /usr/share/qt4/include/QtCore/QUrl /usr/share/qt4/include/QtCore/qurl.h \
+  /usr/share/qt4/include/QtCore/qpair.h ../modulefactory.h \
+  /usr/share/qt4/include/QtCore/QString \
+  /usr/share/qt4/include/QtCore/qstring.h \
+  /usr/share/qt4/include/QtCore/QStringList \
+  /usr/share/qt4/include/QtCore/qstringlist.h \
+  /usr/share/qt4/include/QtCore/QMap /usr/share/qt4/include/QtCore/qmap.h \
+  ../module.h /usr/share/qt4/include/QtCore/QtPlugin \
+  /usr/share/qt4/include/QtCore/qplugin.h \
+  /usr/share/qt4/include/QtCore/qpointer.h ../request.h ../response.h \
+  simpledirlist.h ../module.h ../onion.h

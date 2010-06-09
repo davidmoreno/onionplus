@@ -1,0 +1,13 @@
+#!/usr/bin/python /usr/bin/scam
+
+NAME=onion
+VERSION=0.0.1
+
+SCAMS=cpp qt4[qtlibs=QtNetwork]
+
+CXXFLAGS+=-O2 -Werror -Wall
+
+SCAM_SUBDIRS=src
+
+DIST=configure Makefile.scam README dirlist.html error.html example.config test.html
+

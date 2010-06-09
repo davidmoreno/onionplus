@@ -1,0 +1,16 @@
+CXXFLAGS+=-O2 -g  -rdynamic
+LDFLAGS+=-O2 -g -rdynamic
+
+SCAM_SUBDIR=modules moremodules
+
+onion: onion.cpp configparser.cpp configparser.h module.h modulefactory.cpp \
+      modulefactory.h modulelist.h modulelist.cpp daemon.cpp daemon.h \
+      request.cpp request.h response.h response.cpp client.h client.cpp \
+      modules/onionmodules.a
+      
+    
+
+# daemon.cpp daemon.h client.cpp client.h request.cpp request.h \
+#	  response.cpp response.h processorfactory.cpp processorfactory.h processor.h \
+      
+#fileprocessor.h fileprocessor.cpp

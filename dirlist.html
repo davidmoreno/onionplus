@@ -1,0 +1,126 @@
+<html>
+ <head>
+  <title>Dirlist</title>
+<style type="text/css">
+table.filelist {
+  width: 100%;
+  border-collapse: collapse;
+}
+table.filelist th{
+  border: 1px solid #ABA;
+}
+table.filelist td{
+  border: 1px solid #CEC;
+}
+
+table.filelist tr:hover{
+  background-color: #CEC;
+}
+
+table.filelist a{
+  text-decoration: none;
+}
+
+table.dirlist{
+  width: 100%;
+  border: 1px blue solid;
+  margin: 20px;
+}
+
+table.dirlist th{
+  background: lightblue;
+}
+
+table.dirlist a{
+  width: 100%;
+  background: blue;
+  text-decoration: none;
+  margin: 0px;
+}
+
+table.dirlist a:hover{
+  background: lightblue;
+}
+
+
+
+</style>
+
+  <script src="/static/MochiKit.js"></script>
+<script lang="text/javascript">
+
+prepareBread = function(){
+  cd=$('currentdir')
+  replaceChildNodes(cd,null)
+  cA='/'
+  appendChildNodes(cd,A({'href':'javascript:chdir("'+cA+'")'},cA))
+  forEach(currentDir.split('/').slice(1,-1),function(path){
+    cA+=path+'/'
+    appendChildNodes(cd,A({'href':'javascript:chdir("'+cA+'")'},path),'/')
+  })
+}
+
+loadData = function(dta){
+  $('message').innerHTML=''
+  prepareBread()
+
+  trs=new Array;
+  forEach(dta.files,function(file){
+    if (file.type=="directory"){
+      if (file.name=='.' || file.name=='..')
+	return;
+      lnk=A({'href':file.name+"/"},file.name)
+    }
+    else
+      lnk=A({'href':currentDir+file.name,'target':'#preview'},file.name)
+
+    tr=TR(null,
+          TD(null,lnk),
+          TD(null,file.size),
+          TD(null,file.date),
+          TD(null,file.type)
+        );
+    trs.push(tr);
+  })
+  replaceChildNodes($('tbody'),trs);
+}
+
+errorLoading = function(e){
+  $('message').innerHTML='ERROR Loading'
+  prepareBread()
+}
+
+loadDirContents = function(){
+  $('currentdir').innerHTML='Loading...'
+  currentDir=document.location.pathname
+  replaceChildNodes($('tbody'),null);
+  var url=currentDir+'/_json'
+  url=url.replace("//","/")
+  url=url.replace(" ","%20")
+  d=loadJSONDoc(url);
+  d.addCallbacks(loadData,errorLoading);
+}
+
+addLoadEvent(function(){
+  loadDirContents()
+})
+
+</script>
+
+ </head>
+
+ <body>
+
+<h2 id="message"></h2>
+<h1>Current dir: <h2 id="currentdir">.</h2></h1>
+
+<table class="filelist">
+ <thead><tr><th>Filename</th><th>Size</th><th>Date</th><th>Type</th></tr></thead>
+ <tbody id="tbody">
+ </tbody>
+</table>
+
+<a href="javascript:loadDirContents()">Reload</a>
+
+ </body>
+</html>

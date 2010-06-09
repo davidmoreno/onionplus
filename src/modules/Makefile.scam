@@ -1,0 +1,12 @@
+SCAMS=staticlib
+
+CXXFLAGS+=-I.. -fPIC
+LDFLAGS+=-fPIC
+CXXFLAGS+=-DONION_SERVER
+
+onionmodules.a: fake.cpp include.cpp \
+      server.h server.cpp path.cpp path.h \
+      staticfile.h staticfile.cpp \
+      directory.h directory.cpp \
+      activatemodule.cpp 
+
