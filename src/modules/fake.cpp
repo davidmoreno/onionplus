@@ -21,5 +21,5 @@
 using namespace Onion;
 
 Module *fakeConstructor(const QStringList &,const QMap<QString,QString> &){
-	return new Module();
+	return new Module("Fake");
 }

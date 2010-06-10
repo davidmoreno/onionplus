@@ -27,9 +27,10 @@ namespace Onion{
 	
 	class Server : public Module{
 	public:
-		Server(const QString &s):server(s){};
+		Server(const QString &s):Module("Server"),server(s){};
 
 		QIODevice *process(Request &,Response &);
+		QString description(){ return QString("%1(%2)").arg(name()).arg(server.pattern()); }
 	protected:
 		QRegExp server;
 	};

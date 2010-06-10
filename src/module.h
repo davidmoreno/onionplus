@@ -24,6 +24,7 @@ class QIODevice;
 #include <QtPlugin>
 #include <QString>
 
+#include "debug.h"
 #include "request.h"
 #include "response.h"
 
@@ -46,6 +47,7 @@ namespace Onion{
 	 */
 	class Module{
 	public:
+		Module(const QString &name){ _name=name; }
 		virtual ~Module(){};
 
 		/**
@@ -61,12 +63,15 @@ namespace Onion{
 		 * In all three cases, headers may be modified: new env. vars at request,
 		 * new response headers at response...
 		 */
-		virtual QIODevice *process(Request &, Response &){ return NULL; };
+		virtual QIODevice *process(Request &, Response &){ WARNING("Doing nothing. Consuming cycles"); return NULL; };
 
 		/// Sets the next module in this chain.
 		void setNextModule(Module *next){ nextModule=next; }
+		QString name(){ return _name; }
+		virtual QString description(){ return name(); }
 	protected:
 		Module *nextModule;
+		QString _name;
 	};
 
 };

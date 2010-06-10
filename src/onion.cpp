@@ -27,6 +27,7 @@
 #include "daemon.h"
 #include "onion.h"
 
+char ONION_DEBUG=getenv("ONION_DEBUG")!=NULL;
 
 int main(int argc, char **argv){
 	QCoreApplication *app=new QCoreApplication(argc, argv);

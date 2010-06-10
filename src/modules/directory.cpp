@@ -20,6 +20,7 @@
 #include <QDir>
 #include <QBuffer>
 
+#include "debug.h"
 #include "onion.h"
 #include "directory.h"
 
@@ -41,14 +42,14 @@ Module *directoryConstructor(const QStringList &l,const QMap<QString,QString> &m
  */
 QIODevice *Directory::process(Request &req,Response &res){
 	if (!QDir::cleanPath(dirname+"/"+req.getPath()).contains(dirname)){
-		qDebug("%s:%d trying to escape allowed path",__FILE__,__LINE__);
+		ERROR("Trying to escape allowed path");
 		return NULL;
 	}
 
 	QFile *f=new QFile(dirname+"/"+req.getPath());
 	f->open(QIODevice::ReadOnly);
 	if (!f->isOpen()){
-		qDebug("%s:%d file not found: %s %p",__FILE__,__LINE__,(char*)f->fileName().toLatin1().data(),this);
+		WARNING("File not found: %s %p",(char*)f->fileName().toLatin1().data(),this);
 		QBuffer *r=new QBuffer();
 		r->open(QBuffer::ReadWrite);
 		r->write("<h1>404 - File '");

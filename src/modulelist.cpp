@@ -16,6 +16,7 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "debug.h"
 #include "modulelist.h"
 
 using namespace Onion;
@@ -30,11 +31,12 @@ void ModuleList::append(Module *mod){
 QIODevice *ModuleList::process(Request &req, Response &res){
 	QIODevice *ret;
 	foreach(Module *mod, list){
+		DEBUG("Passing through module: %s",mod->description().toAscii().data());
 		ret=mod->process(req,res);
 		if (ret){
 			return ret;
 		}
 	}
-	qDebug("%s:%d could not use any",__FILE__,__LINE__);
+	ERROR("Could not use any module to process petition");
 	return NULL;
 };

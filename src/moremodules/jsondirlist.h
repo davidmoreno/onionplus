@@ -25,7 +25,7 @@ namespace Onion{
 
 	class JsonDirList : public Module{
 	public:
-		JsonDirList(const QString &s) : basedir(s){ };
+		JsonDirList(const QString &s) : Module("JsonDirList"),basedir(s){ };
 
 		QIODevice *process(Request &req, Response &res);
 	protected:

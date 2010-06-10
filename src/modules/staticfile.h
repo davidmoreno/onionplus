@@ -25,9 +25,10 @@ namespace Onion{
 
 	class StaticFile : public Module{
 	public:
-		StaticFile(const QString &s, int e) : filename(s), errorCode(e){}
+		StaticFile(const QString &s, int e) : Module("StaticFile"),filename(s), errorCode(e){}
 
 		QIODevice *process(Request &req, Response &res);
+		QString description(){ return QString("%1(%2, errorCode=%3)").arg(name()).arg(filename).arg(errorCode); }
 	protected:
 		QString filename;
 		int errorCode;

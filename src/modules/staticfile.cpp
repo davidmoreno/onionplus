@@ -45,7 +45,7 @@ Module *staticFileConstructor(const QStringList &l,const QMap<QString,QString> &
  * @short If the constructing RegExp matches, then return next in chain.
  */
 QIODevice *StaticFile::process(Request &req,Response &res){
-	qDebug("%s:%d Open file %s",__FILE__,__LINE__,(char*)filename.toLatin1().data());
+	DEBUG("Open file %s",(char*)filename.toLatin1().data());
 	QFile *f=new QFile(filename);
 	f->open(QIODevice::ReadOnly);
 	if (!f->isOpen()){

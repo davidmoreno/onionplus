@@ -30,8 +30,10 @@ Module *serverConstructor(const QStringList &l,const QMap<QString,QString> &m){
  * @short If the constructing RegExp matches, then return next in chain.
  */
 QIODevice *Server::process(Request &req,Response &res){
-	if (server.exactMatch(req.get("Server")) && nextModule!=NULL)
+	if (server.exactMatch(req.get("Server")) && nextModule!=NULL){
+		DEBUG("Getting inside module %s",nextModule->description().toAscii().data());
 		return nextModule->process(req,res);
+	}
 
 	return NULL;
 }

@@ -9,6 +9,8 @@ INCLUDE( ${QT_USE_FILE} )
 add_subdirectory(modules)
 add_subdirectory(moremodules)
 
+ADD_DEFINITIONS(-Wall -Werror)
+
 QT4_WRAP_CPP( ONION_MOC_SRCS ${ONION_MOC_HDRS} )
 
 add_executable (onion onion.cpp client.cpp configparser.cpp daemon.cpp module.cpp 

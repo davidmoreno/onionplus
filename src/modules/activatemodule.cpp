@@ -20,13 +20,14 @@
 #include <dlfcn.h>
 #include <stdlib.h>
 
+#include "../debug.h"
 #include "path.h"
 
 using namespace Onion;
 
 Module *activateModule(const QStringList &l,const QMap<QString,QString> &m){
 	foreach(QString module, l){
-		qDebug("%s:%d load module %s",__FILE__,__LINE__,(const char *)module.toAscii().data());
+		LOG("load module %s",(const char *)module.toAscii().data());
 		
 		void *onionmodule;
 		
@@ -41,17 +42,17 @@ Module *activateModule(const QStringList &l,const QMap<QString,QString> &m){
 			void (*createOnionModule)(void);
 			createOnionModule=(void(*)(void))dlsym(onionmodule,"createOnionModule");
 			if (!createOnionModule){
-				qDebug("%s:%d cant load module %s! Aborting! (%s)",__FILE__,__LINE__,(const char *)module.toAscii().data(), dlerror());
+				ERROR("Cant load module %s! Aborting! (%s)",(const char *)module.toAscii().data(), dlerror());
 				return NULL;
 			}
 			createOnionModule();
 		}
 		else{
-			qDebug("%s:%d cant load module %s! Aborting! (%s)",__FILE__,__LINE__,(const char *)module.toAscii().data(), dlerror());
+			ERROR("Cant load module %s! Aborting! (%s)",(const char *)module.toAscii().data(), dlerror());
 			return NULL;
 		}
 	}
 
-	return new Module();
+	return new Module("Activate");
 }
 

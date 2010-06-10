@@ -21,6 +21,7 @@
 #include <QDateTime>
 #include <QDir>
 
+#include "debug.h"
 #include "client.h"
 #include "response.h"
 #include "module.h"
@@ -35,14 +36,14 @@ Client::Client(QTcpSocket *client, Module *root) : request(client), root(root){
 	connect(client,SIGNAL(bytesWritten(qint64)),
 					this,SLOT(readAndWrite()));
 
-	//qDebug("%s:%d Client",__FILE__,__LINE__);
+	DEBUG("Client %p",this);
 	readRequest();
 }
 
 
 Client::~Client(){
 	// connected deleteLater to disconnect at daemon.cpp.
-	//qDebug("%s:%d ~Client",__FILE__,__LINE__);
+	DEBUG("~Client %p",this);
 	delete fromModule;
 }
 
@@ -97,7 +98,7 @@ void Client::processPetition(){
 	if (!fromModule){
 		response.setStatus(500);
 		request.client()->write(response.headerAsByteArray());
-		qDebug("%s:%d nobody could response your petition!",__FILE__,__LINE__);
+		ERROR("Nobody could response your petition!");
 		request.client()->write("<h1>404 - not found</h1>");
 		request.client()->close();
 		return;
@@ -126,9 +127,7 @@ void Client::processPetition(){
 void Client::readAndWrite(){
 	if (!fromModule)
 		return;
-	//qDebug("%s:%d readAndWrite (continue? %d)",__FILE__,__LINE__,!fromModule->atEnd());
 	if (response.getLength()<=bytesSent){
-		//qDebug("%s:%d done: %d %ld",__FILE__,__LINE__,response.getHeader("Content-Length").toInt(),bytesSent);
 		fromModule->close();
 	}
 
@@ -136,11 +135,11 @@ void Client::readAndWrite(){
 		if (response.getHeader("connection").toLower()=="close" || 
 				request.get("connection").toLower()!="keep-alive" || 
 				response.getHeader("keep-alive").isEmpty()) {
-			 qDebug("%s:%d close",__FILE__,__LINE__);
+			 DEBUG("Close %p",this);
 			request.client()->disconnect();
 		}
 		else{ // Ready to get another...
-			qDebug("%s:%d keep alive",__FILE__,__LINE__);
+			DEBUG("Keep alive %p",this);
 			atHeader=2;
 			request.clean();
 		}
@@ -150,8 +149,6 @@ void Client::readAndWrite(){
 	while(request.client()->bytesToWrite()<=0){
 		QByteArray output;
 		output=fromModule->read(2*1024);
-//     qDebug("%s:%d isOpen? %d %d %s",__FILE__,__LINE__, fromModule->isOpen(), fromModule->atEnd(), output.data());
 		bytesSent+=request.client()->write(output); // buffer size should be tweakable.
 	}
-//   qDebug("%s:%d done",__FILE__,__LINE__);
 }

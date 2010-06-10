@@ -38,6 +38,7 @@ QIODevice *Path::process(Request &req,Response &res){
 	if ((path.indexIn(checkPath)>=0) && nextModule){
 		req.setPath(checkPath.remove(path));
 		//qDebug("%s:%d path %s in  %s",__FILE__,__LINE__,QS(checkPath),QS(path.pattern()));
+		DEBUG("Getting inside module %s",nextModule->description().toAscii().data());
 		return nextModule->process(req,res);
 	}
 	//qDebug("%s:%d skip path %s in %s",__FILE__,__LINE__,QS(checkPath),QS(path.pattern()));

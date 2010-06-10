@@ -27,13 +27,13 @@ namespace Onion{
 	
 	class Path : public Module{
 	public:
-		Path(const QString &p):path(p){};
+		Path(const QString &p):Module("Path"),path(p){};
 
 		QIODevice *process(Request &,Response &);
+		QString description(){ return QString("%1(%2)").arg(name()).arg( path.pattern() ); }
 	protected:
 		QRegExp path;
 	};
-
 };
 
 #endif

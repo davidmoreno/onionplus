@@ -16,6 +16,7 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "debug.h"
 #include "modulefactory.h"
 #include "module.h"
 
@@ -78,7 +79,7 @@ Module *ModuleFactory::getModule(
  * replaced an older version).
  */
 bool ModuleFactory::registerModule(const QString &name,ModuleConstructor mc){
-	qDebug("%s:%d register module %s",__FILE__,__LINE__,(const char*)name.toAscii().data());
+	LOG("register module %s",(const char*)name.toAscii().data());
 	bool replace=factory.moduleConstructors.contains(name);
 	factory.moduleConstructors[name]=mc;
 	return replace;

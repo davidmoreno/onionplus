@@ -27,6 +27,7 @@
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
 
+#include "debug.h"
 #include "configparser.h"
 #include "daemon.h"
 #include "client.h"
@@ -41,7 +42,7 @@ Daemon::Daemon(const QString &configfile) {
 	root=c.getRoot();
 
 	if (c.getHasErrors()){
-		qDebug("%s:%d Errors parsing config file. Stoping!",__FILE__,__LINE__);
+		ERROR("Errors parsing config file. Stoping!");
 		exit(1);
 	}
 
@@ -50,9 +51,8 @@ Daemon::Daemon(const QString &configfile) {
 	connect(server,SIGNAL(newConnection()), this, SLOT(newConnection()));
 
 	server->listen(QHostAddress::Any, 8080);
-	qDebug("%s:%d listening %s:%d",__FILE__,__LINE__, 
-																server->serverAddress().toString().toAscii().data(),
-																server->serverPort());
+	LOG("listening %s:%d",server->serverAddress().toString().toAscii().data(),
+														server->serverPort());
 }
 
 /**
@@ -63,6 +63,7 @@ void Daemon::newConnection(){
 	QTcpSocket *socket=server->nextPendingConnection();
 	while(socket){
 		//qDebug("%s:%d newConnection",__FILE__,__LINE__);
+		DEBUG("new connection");
 
 		// Create client
 		Client *client=new Client(socket, root);

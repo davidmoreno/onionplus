@@ -25,7 +25,7 @@ namespace Onion{
 
 	class Directory : public Module{
 	public:
-		Directory(const QString &s) : dirname(s){}
+		Directory(const QString &s) : Module("Directory"), dirname(s){}
 
 		QIODevice *process(Request &req, Response &res);
 	protected:
