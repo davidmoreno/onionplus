@@ -25,7 +25,7 @@ namespace Onion{
 
 	class SimpleDirList : public Module{
 	public:
-		SimpleDirList(const QString &s) : Module("SimpleDirList"),basedir(s){ };
+		SimpleDirList(const QString &s);
 
 		QIODevice *process(Request &req, Response &res);
 	protected:

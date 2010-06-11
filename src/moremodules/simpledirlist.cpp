@@ -34,47 +34,71 @@ Module *simpleDirListConstructor(const QStringList &l,const QMap<QString,QString
 	return new SimpleDirList(l[0]);
 }
 
+ 
 ONION_MODULE("SimpleDirList",simpleDirListConstructor);
 
+/**
+ * @short Initializes the dirlist. Loads necesary data.
+ */
+SimpleDirList::SimpleDirList(const QString &s):Module("SimpleDirList"),basedir(s){ 
+};
+ 
 
 /**
  * @short Returns s Json list with the asked directory contents.
  */
 QIODevice *SimpleDirList::process(Request &req,Response &res){
-	QDir d(basedir+req.getPath());
-	//qDebug("%s:%d ask for %s",__FILE__,__LINE__,QS(d.absolutePath()));
+	DEBUG(QS(req.getPath()));
+	DEBUG(QS(req.getQuery()));
+
+	if (req.getQuery()=="onion.png"){
+		DEBUG("Returning an onion");
+		QFile *f=new QFile(":onion.png");
+		res.setHeader("mime-type","image/png");
+		f->open(QIODevice::ReadOnly);
+		res.setLength(f->size());
+		return f;
+	}
+	if (req.getQuery()=="dirlist.css"){
+		DEBUG("Returning an dirlist.css");
+		QFile *f=new QFile(":dirlist.css");
+		res.setHeader("mime-type","text/css");
+		f->open(QIODevice::ReadOnly);
+		res.setLength(f->size());
+		res.setKeepAlive(true);
+		return f;
+	}
+
+QDir d(basedir+req.getPath());
 	if (!(d.absolutePath()+"/").contains(basedir)){
-		//qDebug("%s:%d trying to escape from allowed path! (try: %s, allowed: %s)",
-		//  __FILE__,__LINE__,QS(d.absolutePath()),QS(basedir));
+		ERROR("Trying to escape from allowed path! (try: %s, allowed: %s)",
+						QS(d.absolutePath()),QS(basedir));
 		return NULL;
 	}
+	if (!d.exists()){
+		// Try a file
+		if (QFile::exists(basedir+req.getPath())){
+			QFile *f=new QFile(basedir+req.getPath());
+			f->open(QIODevice::ReadOnly);
+			res.setLength(f->size());
+			res.setKeepAlive(true);
+			return f;
+		}
+		return NULL;
+	}
+	
 	QFileInfoList l=d.entryInfoList();
 
 	QBuffer *r=new QBuffer();
 	r->open(QBuffer::ReadWrite);
 
+	r->write("<html>");
+	r->write(QString("<title>%1</title>\n").arg(req.getPath()).toUtf8());
+	r->write("<style>@import url(\"/?dirlist.css\");</style>\n");
 	r->write(
-"<html><title>\n"
-"<style type=\"text/css\">\n"
-"table,td{\n"
-"  border: 1px solid black;\n"
-"  width: 100%;\n"
-"  border-collapse: collapse;\n"
-"}\n"
-"a:hover {\n"
-"  text-decoration: none;\n"
-"  background-color: #DDD;\n"
-"  display: block;\n"
-"}\n"
-"a {\n"
-"  text-decoration: none;\n"
-"  background-color: #FFF;\n"
-"  display: block;\n"
-"}\n"
-"</style>\n"
 "<body>\n"
-"<img src=\"/img/onion.png\">\n"
-"<table><tr><th>Filename</th><th>Size</th><th>Date</th><th>Type</th></tr>\n");
+"<img src=\"/?onion.png\">\n"
+"<div><table><tr class=\"header\"><th>Filename</th><th>Size</th><th>Date</th><th>Type</th></tr>\n");
 
 	QStringList fl;
 	QString filename;
@@ -88,17 +112,19 @@ QIODevice *SimpleDirList::process(Request &req,Response &res){
 			type=f.suffix();
 			filename=f.fileName();
 		}
-		r->write(QString("<tr><td><a href=\"%1\">%2</a></td><td>%3</td><td>%4</td><td>%5</td></tr>\n").
+		r->write(QString("<tr onclick=\"location+='%6';\"><td><a href=\"%1\">%2</a></td><td class=\"size\">%3</td><td class=\"date\">%4</td><td>%5</td></tr>\n").
 								arg(encodeURL(filename)).arg(filename).arg(f.size()).
-								arg(f.created().toString(Qt::ISODate)).arg(type).toUtf8() ) ;
+								arg(f.created().toString("yyyy-MM-dd hh:mm")).arg(type).
+								arg(encodeURL(filename))
+								.toUtf8());
 	}
 
-	r->write("</table></body></html>");
+	r->write("</table><b>(C) 2010 David Moreno Montero</b>\n");
+	r->write("</div>\n</body>\n</html>\n");
 
+	res.setLength(r->pos());
 	res.setHeader("Content-Type","text/html; charset=UTF-8");
-	res.setHeader("Content-Length",QString::number(r->pos()));
-	res.setHeader("Keep-Alive","timeout=15, max=98");
-	res.setHeader("Connection","Keep-Alive");
+	res.setKeepAlive(true);
 	r->seek(0);
 
 	return r;

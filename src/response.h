@@ -44,13 +44,17 @@ public:
 	void setStatus(int s){ status=s; }
 	unsigned long getLength(){ return length; }
 
+
+	void setLength(quint64 l);
+	void setKeepAlive(bool activate);
+
 	/// Just writes the header
 	QByteArray headerAsByteArray();
 
 protected:
 	QMap<QString,QString> headers;
 
-	unsigned long length;
+	quint64 length;
 	int status;
 };
 

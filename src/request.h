@@ -38,10 +38,12 @@ public:
 	void clean();
 
 	QString getPath() const{ return path; }
+	QString getQuery() const{ return query; }
 	void    setPath(const QString &_path){ path=_path; }
 	QString getFullPath() const{ return fullpath; }
 	QString getMethod() const{ return method; }
 	QString get(const QString &key) const{ return headers[key]; }
+	QString getGET(){ return GET; }
 	bool isValid() const{ return valid; }
 	QTcpSocket *client(){ return m_client; }
 protected:
@@ -50,6 +52,8 @@ protected:
 	QString path;
 	QString fullpath;
 	QString method;
+	QString query;
+	QString GET;
 
 	bool valid;
 };

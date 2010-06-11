@@ -61,7 +61,33 @@ QByteArray Response::headerAsByteArray(){
  * @short Sets the header. For some special headers do something.
  */
 void Response::setHeader(const QString &key, const QString &value){
+	if (value.isNull()){
+		headers.remove(key);
+		return;
+	}
 	if (key=="content-length")
 		length=value.toInt();
 	headers[key.toLower()]=value;
+}
+
+/**
+ * @short Shortcut to set the header about the length
+ */
+void Response::setLength(quint64 l){ 	
+	headers["content-length"]=QString::number(l);
+	length=l; 
+}
+
+/**
+ * @short Shortcut to express the desire (or not) to keepalive
+ */
+void Response::setKeepAlive(bool activate){
+	if (activate){
+		setHeader("keep-alive","timeout=15, max=98");
+		setHeader("connection","keep-alive");
+	}
+	else{
+		setHeader("keep-alive",QString::null);
+		setHeader("connection",QString::null);
+	}
 }

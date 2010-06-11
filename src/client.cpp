@@ -88,6 +88,8 @@ void Client::processPetition(){
 	response=Response();
 	bytesSent=0;
 
+	DEBUG("GET %s",request.getGET().toAscii().data());
+	
 	if (root){
 		if (fromModule)
 			delete fromModule;
@@ -132,11 +134,14 @@ void Client::readAndWrite(){
 	}
 
 	if (fromModule->atEnd() || !fromModule->isOpen()){ // Do nothing. Hangs this connection; maybe more petitions later.
-		if (response.getHeader("connection").toLower()=="close" || 
-				request.get("connection").toLower()!="keep-alive" || 
-				response.getHeader("keep-alive").isEmpty()) {
-			 DEBUG("Close %p",this);
+		// closes if any of these conditions
+		if (response.getHeader("content-length").isEmpty() ||        // unknown length
+				response.getHeader("connection").toLower()=="close" ||   // i forced close
+				request.get("connection").toLower()!="keep-alive" ||     // other side does not want keep alive
+				response.getHeader("keep-alive").isEmpty()) {            // i dont want keep alive
+			DEBUG("Close %p",this);
 			request.client()->disconnect();
+			deleteLater();
 		}
 		else{ // Ready to get another...
 			DEBUG("Keep alive %p",this);

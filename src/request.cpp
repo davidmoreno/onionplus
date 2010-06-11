@@ -42,13 +42,19 @@ Request::~Request(){
 void Request::addHeader(const QString &header){
 	//qDebug("%s:%d addheader %s (%d)",__FILE__,__LINE__,(char*)header.toUtf8().data(),headers.count());
 	if (method.isEmpty()){
+		GET=header;
 		QStringList spl;
 		spl=header.split(' ');
 		method=spl[0].toUpper();
 		path=decodeURL(spl[1]);
 		if (path.contains("?")){
-			path=path.split("?")[0];
+			QStringList parts=path.split("?");
+			path=parts[0];
+			parts.removeAt(0);
+			query=parts.join("?");
 		}
+		else
+			query=QString::null;
 		fullpath=path;
 		if (method!="GET"){
 			valid=false;

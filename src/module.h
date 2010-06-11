@@ -63,7 +63,7 @@ namespace Onion{
 		 * In all three cases, headers may be modified: new env. vars at request,
 		 * new response headers at response...
 		 */
-		virtual QIODevice *process(Request &, Response &){ WARNING("Doing nothing. Consuming cycles"); return NULL; };
+		virtual QIODevice *process(Request &, Response &){ WARNING("Doing nothing at %s. Consuming cycles", name().toAscii().data()); return NULL; };
 
 		/// Sets the next module in this chain.
 		void setNextModule(Module *next){ nextModule=next; }

@@ -1,0 +1,56 @@
+body{
+	background: white;
+}
+
+div{
+	background: #fff;
+	border: 1px solid black;
+	width: 90%;
+	margin-top: 5%;
+	margin-left: 5%;
+	opacity: 0.8;
+
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+table{
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table td{
+	border-right: 1px solid #777;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+img{
+	position: fixed;
+	z-index: -1;
+	top: 1%;
+	left: 1%;
+}
+
+table td.size{
+	text-align: right
+}
+
+table tr:hover{
+	background: yellow;
+	cursor: pointer;
+}
+table tr.header{
+	background: #111;
+	color: white;
+}
+
+a{
+	text-decoration: none;
+}
+
+b{
+	display: block;
+	text-align: right;
+	padding-right: 1em;
+}
