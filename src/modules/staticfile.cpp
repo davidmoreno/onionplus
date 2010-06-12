@@ -48,24 +48,17 @@ QIODevice *StaticFile::process(Request &req,Response &res){
 	DEBUG("Open file %s",(char*)filename.toLatin1().data());
 	QFile *f=new QFile(filename);
 	f->open(QIODevice::ReadOnly);
+	res.setStatus(errorCode);
+
 	if (!f->isOpen()){
-		QBuffer *r=new QBuffer();
-		r->open(QBuffer::ReadWrite);
-		r->write("<h1>404 - File '");
-		r->write((char*)f->fileName().toLatin1().data());
-		r->write("' not fould. Check server configuration.<h1>");
-		res.setHeader("Content-Length",QString::number(r->pos()));
-		r->seek(0);
-		res.setHeader("Keep-Alive","timeout=15, max=98");
-		res.setHeader("Connection","Keep-Alive");
-		delete f;
-		
-		return r;
+		f->setFileName(":error.html");
+		f->open(QIODevice::ReadOnly);
+		res.setStatus(404);
 	}
 	
 	res.setHeader("Content-Length",QString::number(f->size()));
+	WARNING("Fixed content type. FIXME");
 	res.setHeader("Content-Type","text/html; charset=utf-8");
-	res.setStatus(errorCode);
 
 	return f;
 }

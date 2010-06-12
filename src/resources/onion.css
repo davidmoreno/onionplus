@@ -10,9 +10,9 @@ div{
 	margin-left: 5%;
 	opacity: 0.8;
 
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
 }
 table{
 	border-collapse: collapse;
@@ -53,4 +53,18 @@ b{
 	display: block;
 	text-align: right;
 	padding-right: 1em;
+}
+
+
+h1{
+	background: #333;
+	color: white;
+	text-align: center;
+	padding-top: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+
+	border-radius: 15px 15px 0px 0px;
+	-moz-border-radius: 15px 15px 0px 0px;
+	-webkit-border-radius: 15px 15px 0px 0px;
 }
