@@ -26,6 +26,7 @@ class QIODevice;
 
 namespace Onion{
 	class Module;
+	class ModuleList;
 
 	/**
 	 * @short Parses a config file (or QIODevice) and returns the root module
@@ -55,7 +56,7 @@ namespace Onion{
 
 		Module *getModule();
 		Module *getNextModule();
-		Module *getModuleList();
+		ModuleList *getModuleList();
 		Module *getServerOrPath();
 
 		void printError(const QString &);
@@ -68,7 +69,6 @@ namespace Onion{
 
 		Token t;
 		QString r;
-	
 
 		/// To ease config debug.
 		int line, col;

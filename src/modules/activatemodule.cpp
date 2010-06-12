@@ -53,6 +53,6 @@ Module *activateModule(const QStringList &l,const QMap<QString,QString> &m){
 		}
 	}
 
-	return new Module("Activate");
+	return Module::null;
 }
 

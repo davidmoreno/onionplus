@@ -40,3 +40,4 @@ QIODevice *ModuleList::process(Request &req, Response &res){
 	ERROR("Could not use any module to process petition");
 	return NULL;
 };
+

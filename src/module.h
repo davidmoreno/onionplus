@@ -47,9 +47,12 @@ namespace Onion{
 	 */
 	class Module{
 	public:
-		Module(const QString &name){ _name=name; }
+		Module(const QString &name);
 		virtual ~Module(){};
 
+		static Module *null;
+
+		
 		/**
 		 * @short Must perform the real processing.
 		 *
@@ -65,15 +68,18 @@ namespace Onion{
 		 */
 		virtual QIODevice *process(Request &, Response &){ WARNING("Doing nothing at %s. Consuming cycles", name().toAscii().data()); return NULL; };
 
+		virtual QString description(){ return name(); }
+
+		/// @{ @name Support methods
 		/// Sets the next module in this chain.
 		void setNextModule(Module *next){ nextModule=next; }
 		QString name(){ return _name; }
-		virtual QString description(){ return name(); }
+		/// @}
 	protected:
 		Module *nextModule;
 		QString _name;
 	};
-
 };
+
 
 #endif

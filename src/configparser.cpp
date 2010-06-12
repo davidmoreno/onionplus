@@ -341,7 +341,7 @@ Module *ConfigParser::getModule(){
  *
  * It gets the last readen token, and leaves at the same place the new ones.
  */
-Module* ConfigParser::getModuleList(){
+ModuleList* ConfigParser::getModuleList(){
 	ModuleList *list=new ModuleList();
 	Module *tmod;
 
@@ -349,7 +349,8 @@ Module* ConfigParser::getModuleList(){
 		tmod=getModule();  // Just read modules
 		if (tmod==NULL)
 			return NULL;
-		list->append(tmod);
+		if (tmod!=Module::null) // do not add null modules.
+			list->append(tmod);
 	}
 	return list;
 }
