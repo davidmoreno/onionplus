@@ -21,33 +21,33 @@
 #include <QDateTime>
 #include <QUrl>
 
-#include "../modulefactory.h"
-#include "simpledirlist.h"
-#include "../onion.h"
+#include "../../modulefactory.h"
+#include "dirlist.h"
+#include "../../onion.h"
 
 using namespace Onion;
 
-Module *simpleDirListConstructor(const QStringList &l,const QMap<QString,QString> &m){
+Module *dirListConstructor(const QStringList &l,const QMap<QString,QString> &m){
 	if (l.count()!=1 || m.count()>0)
 		return NULL;
 
-	return new SimpleDirList(l[0]);
+	return new DirList(l[0]);
 }
 
  
-ONION_MODULE("SimpleDirList",simpleDirListConstructor);
+ONION_MODULE("DirList",dirListConstructor);
 
 /**
  * @short Initializes the dirlist. Loads necesary data.
  */
-SimpleDirList::SimpleDirList(const QString &s):Module("SimpleDirList"),basedir(s){ 
+DirList::DirList(const QString &s):Module("DirList"),basedir(s){ 
 };
  
 
 /**
  * @short Returns s Json list with the asked directory contents.
  */
-QIODevice *SimpleDirList::process(Request &req,Response &res){
+QIODevice *DirList::process(Request &req,Response &res){
 	DEBUG(QS(req.getPath()));
 	DEBUG(QS(req.getQuery()));
 

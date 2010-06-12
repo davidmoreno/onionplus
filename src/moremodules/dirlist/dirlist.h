@@ -16,16 +16,16 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __SIMPLE_DIR_LIST__
-#define __SIMPLE_DIR_lIST__
+#ifndef __DIR_LIST__
+#define __DIR_lIST__
 
-#include "../module.h"
+#include "../../module.h"
 
 namespace Onion{
 
-	class SimpleDirList : public Module{
+	class DirList : public Module{
 	public:
-		SimpleDirList(const QString &s);
+		DirList(const QString &s);
 
 		QIODevice *process(Request &req, Response &res);
 	protected:
