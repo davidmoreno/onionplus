@@ -47,6 +47,7 @@ namespace Onion{
 		QString getMethod() const{ return method; }
 		QString get(const QString &key) const{ return headers[key]; }
 		QString getGET(){ return GET; }
+		QString getHeader(const QString &key){ return headers[key]; }
 		bool isValid() const{ return valid; }
 		Client *client(){ return m_client; }
 	protected:

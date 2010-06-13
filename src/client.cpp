@@ -111,16 +111,14 @@ void Client::processPetition(){
 		clientSocket->close();
 		return;
 	}
-	else{
-		qDebug("%s %s %s (to %s (%s) from %s, %d bytes)",
-			QS(QDateTime::currentDateTime().toString(Qt::ISODate)),
-			QS(request.getMethod()),
-			QS(request.getFullPath()),
-			QS(request.get("Host")),
-			QS(request.get("Host-IP")),
-			QS(clientSocket->peerAddress().toString()),
-			response.getHeader("Content-Length").toInt());
-	}
+	qDebug("%s %s %s (to %s (%s) from %s, %d bytes)",
+		QS(QDateTime::currentDateTime().toString(Qt::ISODate)),
+		QS(request.getMethod()),
+		QS(request.getFullPath()),
+		QS(request.get("Host")),
+		QS(request.get("Host-IP")),
+		QS(clientSocket->peerAddress().toString()),
+		response.getHeader("Content-Length").toInt());
 
 	clientSocket->write(response.headerAsByteArray());
 
@@ -153,6 +151,7 @@ void Client::readAndWrite(){
 			DEBUG("Keep alive %p",this);
 			atHeader=2;
 			request.clean();
+			request.addHeader("Host-IP",clientSocket->peerAddress().toString());
 		}
 		return;
 	}
