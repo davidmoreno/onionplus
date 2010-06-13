@@ -16,50 +16,24 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CLIENT_H__
-#define __CLIENT_H__
+#ifndef __STATS_H__
+#define __STATS_H__
 
-#include <QObject>
-#include <QtNetwork/QTcpSocket>
-
-#include "request.h"
-#include "response.h"
-
-class QTcpSocket;
-class QIODevice;
+#include <module.h>
 
 namespace Onion{
-	class Module;
-	class Daemon;
 
-	/**
-	 * @short Keeps and coordinate petitions from clients.
-	 * 
-	 * 
-	 */
-	class Client : public QObject{
-	Q_OBJECT
-	public:
-		Client(QTcpSocket *clientSocket, Daemon *daemon);
-		~Client();
+class Stats : public Module
+{
+public:
+	Stats(const QString &where);
 	
-		Daemon *getDaemon(){ return daemon; }
-	protected slots:
-		void readRequest();
-		void processPetition();
-		void readAndWrite();
+	QIODevice *process(Request &req,Response &res);
+protected:
+	QString where;
+	quint64 requests;
+};
 
-	protected:
-		int atHeader;
-		Request request;
-		Response response;
-		unsigned long bytesSent;
-
-		Daemon *daemon;
-		Module *root;
-		QIODevice *fromModule;
-		QTcpSocket *clientSocket;
-	};
 }
-	
-#endif
+
+#endif // STATS_H

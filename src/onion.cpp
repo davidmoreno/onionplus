@@ -18,16 +18,32 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #include <QCoreApplication>
 #include <QStringList>
 #include <QRegExp>
 
+#include "debug.h"
 #include "configparser.h"
 #include "daemon.h"
 #include "onion.h"
 
 char ONION_DEBUG=getenv("ONION_DEBUG")!=NULL;
+
+Onion::Daemon *d=NULL;
+void (*killdaemon_default)(int);
+
+void killdaemon(int s){
+	if (d){
+		LOG("Closing daemon properly.");
+		delete d;
+		d=NULL;
+	}
+	if (killdaemon_default)
+		killdaemon_default(s);
+	exit(0);
+}
 
 int main(int argc, char **argv){
 	QCoreApplication *app=new QCoreApplication(argc, argv);
@@ -38,8 +54,10 @@ int main(int argc, char **argv){
 	else
 		configfile="/etc/onion+.conf";
 	
-	Onion::Daemon d(configfile);
-
+	killdaemon_default=signal(SIGINT, killdaemon);
+	
+	d=new Onion::Daemon(configfile);
+	DEBUG("Running");
 	app->exec();
 }
 

@@ -27,6 +27,8 @@ namespace Onion{
 	class ModuleList : public Module{
 	public:
 		ModuleList():Module("ModuleList"){};
+		virtual ~ModuleList();
+		
 		virtual QIODevice *process(Request &, Response &);
 
 		void append(Module *);

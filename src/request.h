@@ -25,37 +25,41 @@
 
 class QTcpSocket;
 
-/**
- * @short Data from the request.
- */
-class Request {
-public:
-	Request(QTcpSocket *client);
-	~Request();
+namespace Onion{
+	class Client;
+	/**
+	* @short Data from the request.
+	*/
+	class Request {
+	public:
+		Request(Client *client);
+		~Request();
 
-	void addHeader(const QString &header);
+		void addHeader(const QString &header);
+		void addHeader(const QString &headerName, const QString &value);
 
-	void clean();
+		void clean();
 
-	QString getPath() const{ return path; }
-	QString getQuery() const{ return query; }
-	void    setPath(const QString &_path){ path=_path; }
-	QString getFullPath() const{ return fullpath; }
-	QString getMethod() const{ return method; }
-	QString get(const QString &key) const{ return headers[key]; }
-	QString getGET(){ return GET; }
-	bool isValid() const{ return valid; }
-	QTcpSocket *client(){ return m_client; }
-protected:
-	QTcpSocket *m_client;
-	QMap<QString,QString> headers;
-	QString path;
-	QString fullpath;
-	QString method;
-	QString query;
-	QString GET;
+		QString getPath() const{ return path; }
+		QString getQuery() const{ return query; }
+		void    setPath(const QString &_path){ path=_path; }
+		QString getFullPath() const{ return fullpath; }
+		QString getMethod() const{ return method; }
+		QString get(const QString &key) const{ return headers[key]; }
+		QString getGET(){ return GET; }
+		bool isValid() const{ return valid; }
+		Client *client(){ return m_client; }
+	protected:
+		Client *m_client;
+		QMap<QString,QString> headers;
+		QString path;
+		QString fullpath;
+		QString method;
+		QString query;
+		QString GET;
 
-	bool valid;
-};
+		bool valid;
+	};
+}
 
 #endif

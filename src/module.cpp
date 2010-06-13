@@ -34,4 +34,13 @@ Module *Module::null=new Module("NULL");
  */
 Module::Module(const QString &name){
 	_name=name;
+	nextModule=NULL;
+}
+
+/**
+ * @short Destructs the children of this module too.
+ */
+Module::~Module(){
+	if (nextModule)
+		delete nextModule;
 }

@@ -48,7 +48,7 @@ namespace Onion{
 	class Module{
 	public:
 		Module(const QString &name);
-		virtual ~Module(){};
+		virtual ~Module();
 
 		static Module *null;
 

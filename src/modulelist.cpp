@@ -21,6 +21,13 @@
 
 using namespace Onion;
 
+ModuleList::~ModuleList(){
+	foreach(Module *mod, list){
+		if (mod)
+			delete mod;
+	}
+}
+
 void ModuleList::append(Module *mod){
 	list.append(mod);
 }

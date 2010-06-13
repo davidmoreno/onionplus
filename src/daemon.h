@@ -21,10 +21,12 @@
 
 #include <QObject>
 
+#include "configparser.h"
+
 class QTcpServer;
-class Module;
 
 namespace Onion{
+	class Module;
 	/**
 	 * @short Base daemon. Gets the request and send them to the clients.
 	 */
@@ -33,11 +35,26 @@ namespace Onion{
 	public:
 		Daemon(const QString &configfile);
 	
+		/// @{ @name Statistics about daemon ussage
+		quint32 getClientCount(){ return clientCount; }
+		quint32 getActiveClientCount(){ return activeClientCount; }
+		quint32 getMaxActiveClientCount(){ return maxActiveClientCount; }
+		void decreaseActiveClientCount(){ activeClientCount--; }
+		/// @}
+		
+		
+		Module *getRootModule(){ return root; }
+		
 	protected slots:
 		void newConnection();
 	
 	protected:
+		ConfigParser config;
+		
 		QTcpServer *server;
+		quint32 clientCount;
+		quint32 activeClientCount;
+		quint32 maxActiveClientCount;
 	
 		Module *root;
 	};

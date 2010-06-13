@@ -32,6 +32,7 @@ Module *staticFileConstructor(const QStringList &,const QMap<QString,QString> &)
 Module *jsonDirListConstructor(const QStringList &,const QMap<QString,QString> &);
 Module *directoryConstructor(const QStringList &,const QMap<QString,QString> &);
 Module *activateModule(const QStringList &,const QMap<QString,QString> &);
+Module *statsConstructor(const QStringList &,const QMap<QString,QString> &);
 
 /**
  * @short Register basic modules
@@ -48,7 +49,8 @@ ModuleFactory::ModuleFactory(){
 		{"[",&pathConstructor},
 		{"StaticFile",&staticFileConstructor},
 		{"Directory",&directoryConstructor},
-		{"ActivateModule",&activateModule}
+		{"ActivateModule",&activateModule},
+		{"Stats",&statsConstructor},
 	};
 
 	for (unsigned int i=0;i<sizeof(defaultModules)/sizeof(defaultModules[0]);i++){
@@ -78,8 +80,8 @@ Module *ModuleFactory::getModule(
  * It returns whether there was already a module with that name (ie. If it
  * replaced an older version).
  */
-bool ModuleFactory::registerModule(const QString &name,ModuleConstructor mc){
-	LOG("register module %s",(const char*)name.toAscii().data());
+bool ModuleFactory::registerModule(const QString &name, ModuleConstructor mc){
+	LOG("register module %s",name.toUtf8().constData());
 	bool replace=factory.moduleConstructors.contains(name);
 	factory.moduleConstructors[name]=mc;
 	return replace;

@@ -48,8 +48,8 @@ DirList::DirList(const QString &s):Module("DirList"),basedir(s){
  * @short Returns s Json list with the asked directory contents.
  */
 QIODevice *DirList::process(Request &req,Response &res){
-	DEBUG(QS(req.getPath()));
-	DEBUG(QS(req.getQuery()));
+	DEBUG("%s",QS(req.getPath()));
+	DEBUG("%s",QS(req.getQuery()));
 
 	if (req.getQuery()=="onion.png"){
 		DEBUG("Returning an onion");
@@ -69,7 +69,7 @@ QIODevice *DirList::process(Request &req,Response &res){
 		return f;
 	}
 
-QDir d(basedir+req.getPath());
+	QDir d(basedir+req.getPath());
 	if (!(d.absolutePath()+"/").contains(basedir)){
 		ERROR("Trying to escape from allowed path! (try: %s, allowed: %s)",
 						QS(d.absolutePath()),QS(basedir));

@@ -43,9 +43,19 @@ ConfigParser::ConfigParser(const QString &filename) : filename(filename){
 	if (!f->open(QIODevice::ReadOnly)){
 		printError(QString("Cant open file: %1").arg(f->errorString()));
 	}
-
-
 }
+
+/**
+ * @short Removes unused memory
+ */
+ConfigParser::~ConfigParser(){
+	DEBUG("~ConfigParser");
+	if (root)
+		delete root;
+	if (input)
+		delete input;
+}
+
 
 
 /**
@@ -262,7 +272,9 @@ Module *ConfigParser::getRoot(){
 	READ_TOKEN;
 
 	// Really read.
-	return getModuleList();
+	if (!root)
+		root=getModuleList();
+	return root;
 }
 
 /**

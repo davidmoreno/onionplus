@@ -27,25 +27,26 @@
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
 
+#include "module.h"
 #include "debug.h"
 #include "configparser.h"
-#include "daemon.h"
 #include "client.h"
+#include "daemon.h"
 
 using namespace Onion;
 
 /**
  * @short starts the server and connection.
  */
-Daemon::Daemon(const QString &configfile) {
-	ConfigParser c(configfile);
-	root=c.getRoot();
+Daemon::Daemon(const QString &configfile): config(configfile) {
+	root=config.getRoot();
 
-	if (c.getHasErrors()){
+	if (config.getHasErrors()){
 		ERROR("Errors parsing config file. Stoping!");
 		exit(1);
 	}
 
+	maxActiveClientCount=clientCount=activeClientCount=0;
 
 	server=new QTcpServer(this);
 	connect(server,SIGNAL(newConnection()), this, SLOT(newConnection()));
@@ -66,7 +67,11 @@ void Daemon::newConnection(){
 		DEBUG("new connection");
 
 		// Create client
-		Client *client=new Client(socket, root);
+		Client *client=new Client(socket, this);
+		clientCount++;
+		activeClientCount++;
+		if (activeClientCount>maxActiveClientCount)
+			maxActiveClientCount=activeClientCount;
 		
 		connect(socket,SIGNAL(disconnected()), client, SLOT(deleteLater()));
 		//connect(socket,SIGNAL(disconnected()), socket, SLOT(deleteLater()));

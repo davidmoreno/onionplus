@@ -22,41 +22,43 @@
 #include <QMap>
 #include <QString>
 
-class Request;
+namespace Onion{
+	class Request;
 
-/**
- * @short The HTTP response. 
- *
- * Just sets/gets the response header. Processor does the job.
- */
-class Response {
-public:
-	Response();
 	/**
-	* @short Adds a header value
+	* @short The HTTP response. 
+	*
+	* Just sets/gets the response header. Processor does the job.
 	*/
-	void setHeader(const QString &key, const QString &value);
-	/** 
-	 * Returns a header value from the key, or QString::null
-	 */
+	class Response {
+	public:
+		Response();
+		/**
+		* @short Adds a header value
+		*/
+		void setHeader(const QString &key, const QString &value);
+		/** 
+		* Returns a header value from the key, or QString::null
+		*/
 
-	QString getHeader(const QString &key){ return headers[key.toLower()]; }
-	void setStatus(int s){ status=s; }
-	unsigned long getLength(){ return length; }
+		QString getHeader(const QString &key){ return headers[key.toLower()]; }
+		void setStatus(int s){ status=s; }
+		unsigned long getLength(){ return length; }
 
 
-	void setLength(quint64 l);
-	void setKeepAlive(bool activate);
+		void setLength(quint64 l);
+		void setKeepAlive(bool activate);
 
-	/// Just writes the header
-	QByteArray headerAsByteArray();
+		/// Just writes the header
+		QByteArray headerAsByteArray();
 
-protected:
-	QMap<QString,QString> headers;
+	protected:
+		QMap<QString,QString> headers;
 
-	quint64 length;
-	int status;
-};
+		quint64 length;
+		int status;
+	};
+}
 
 
 #endif

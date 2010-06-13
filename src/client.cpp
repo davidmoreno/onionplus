@@ -24,16 +24,21 @@
 #include "debug.h"
 #include "client.h"
 #include "response.h"
+#include "daemon.h"
 #include "module.h"
 
 using namespace Onion;
 
-Client::Client(QTcpSocket *client, Module *root) : request(client), root(root){
+Client::Client(QTcpSocket *clientSocket, Daemon *daemon) : 
+											request(this), 
+											daemon(daemon), root(daemon->getRootModule()), clientSocket(clientSocket){
+	request.addHeader("Host-IP",clientSocket->peerAddress().toString());
+
 	atHeader=2;
 	fromModule=NULL;
 
-	connect(client,SIGNAL(readyRead()), this, SLOT(readRequest()));
-	connect(client,SIGNAL(bytesWritten(qint64)),
+	connect(clientSocket,SIGNAL(readyRead()), this, SLOT(readRequest()));
+	connect(clientSocket,SIGNAL(bytesWritten(qint64)),
 					this,SLOT(readAndWrite()));
 
 	DEBUG("Client %p",this);
@@ -43,8 +48,10 @@ Client::Client(QTcpSocket *client, Module *root) : request(client), root(root){
 
 Client::~Client(){
 	// connected deleteLater to disconnect at daemon.cpp.
+	daemon->decreaseActiveClientCount();
 	DEBUG("~Client %p",this);
 	delete fromModule;
+	delete clientSocket;
 }
 
 /**
@@ -56,9 +63,8 @@ void Client::readRequest(){
 	qint64 len;
 	char line[1024];
 
-	QTcpSocket *client=dynamic_cast<QTcpSocket*>(request.client());
-	while(client->canReadLine()){
-		len=client->readLine(line,sizeof(line)/sizeof(line[0]));
+	while(clientSocket->canReadLine()){
+		len=clientSocket->readLine(line,sizeof(line)/sizeof(line[0]));
 		QString s;
 		foreach(QString ss,QString(line).split('\n')){
 			s=ss.simplified();
@@ -99,10 +105,10 @@ void Client::processPetition(){
 	//qDebug("%s:%d processing by %s",__FILE__,__LINE__,fromModule ? fromModule->metaObject()->className() : "NULL");
 	if (!fromModule){
 		response.setStatus(500);
-		request.client()->write(response.headerAsByteArray());
+		clientSocket->write(response.headerAsByteArray());
 		ERROR("Nobody could response your petition!");
-		request.client()->write("<h1>404 - not found</h1>");
-		request.client()->close();
+		clientSocket->write("<h1>404 - not found</h1>");
+		clientSocket->close();
 		return;
 	}
 	else{
@@ -112,11 +118,11 @@ void Client::processPetition(){
 			QS(request.getFullPath()),
 			QS(request.get("Host")),
 			QS(request.get("Host-IP")),
-			QS(request.client()->peerAddress().toString()),
+			QS(clientSocket->peerAddress().toString()),
 			response.getHeader("Content-Length").toInt());
 	}
 
-	request.client()->write(response.headerAsByteArray());
+	clientSocket->write(response.headerAsByteArray());
 
 	readAndWrite();
 }
@@ -151,9 +157,9 @@ void Client::readAndWrite(){
 		return;
 	}
 
-	while(request.client()->bytesToWrite()<=0){
+	while(clientSocket->bytesToWrite()<=0){
 		QByteArray output;
 		output=fromModule->read(2*1024);
-		bytesSent+=request.client()->write(output); // buffer size should be tweakable.
+		bytesSent+=clientSocket->write(output); // buffer size should be tweakable.
 	}
 }

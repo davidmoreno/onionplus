@@ -20,18 +20,19 @@
 #include <QtNetwork/QHostAddress>
 
 #include "onion.h"
+#include "client.h"
 #include "request.h"
+
+using namespace Onion;
 
 /**
  * @short Decompose headers to extract data and ease access to headers
  */
-Request::Request(QTcpSocket *client):m_client(client){
-	headers["Host-IP"]=client->peerAddress().toString();
+Request::Request(Client *client):m_client(client){
 	valid=true;
 }
 
 Request::~Request(){
-	delete m_client;
 }
 
 /**
@@ -69,6 +70,13 @@ void Request::addHeader(const QString &header){
 		headers[key]=value;
 		//qDebug("%s:%d new header '%s':'%s'",__FILE__,__LINE__,key.toLatin1().data(),value.toLatin1().data());
 	}
+}
+
+/**
+ * @short Simple add header: key and value
+ */
+void Request::addHeader(const QString &headerName, const QString &value){
+	headers[headerName]=value;
 }
 
 /**

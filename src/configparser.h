@@ -34,6 +34,7 @@ namespace Onion{
 	class ConfigParser{
 	public:
 		ConfigParser(const QString &filename=QString::null);
+		~ConfigParser();
 		
 		Module *getRoot();
 		bool getHasErrors(){ return hasErrors; }

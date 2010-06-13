@@ -22,6 +22,8 @@
 #include "onion.h"
 #include "response.h"
 
+using namespace Onion;
+
 /**
  * @short Initiailzes a header response
  */
