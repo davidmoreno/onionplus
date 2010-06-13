@@ -19,7 +19,7 @@
 #ifndef __DIR_LIST__
 #define __DIR_lIST__
 
-#include "../../module.h"
+#include "../module.h"
 
 namespace Onion{
 

@@ -39,7 +39,7 @@ QIODevice *Stats::process(Request &req,Response &res){
 	requests++;
 	DEBUG("<%s> = <%s>",QS(req.getPath()), QS(where));
 	if (req.getPath()!=where)
-		return nextModule->process(req,res);
+		return nextModule ? nextModule->process(req,res) : NULL;
 	else{
 		QBuffer *r=new QBuffer();
 		r->open(QBuffer::ReadWrite);

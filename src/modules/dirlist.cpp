@@ -21,9 +21,9 @@
 #include <QDateTime>
 #include <QUrl>
 
-#include "../../modulefactory.h"
+#include "../modulefactory.h"
 #include "dirlist.h"
-#include "../../onion.h"
+#include "../onion.h"
 
 using namespace Onion;
 
@@ -34,8 +34,9 @@ Module *dirListConstructor(const QStringList &l,const QMap<QString,QString> &m){
 	return new DirList(l[0]);
 }
 
- 
+#ifdef ONION_PLUGIN
 ONION_MODULE("DirList",dirListConstructor);
+#endif
 
 /**
  * @short Initializes the dirlist. Loads necesary data.

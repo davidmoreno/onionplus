@@ -33,6 +33,7 @@ Module *jsonDirListConstructor(const QStringList &,const QMap<QString,QString> &
 Module *directoryConstructor(const QStringList &,const QMap<QString,QString> &);
 Module *activateModule(const QStringList &,const QMap<QString,QString> &);
 Module *statsConstructor(const QStringList &,const QMap<QString,QString> &);
+Module *dirListConstructor(const QStringList &,const QMap<QString,QString> &);
 
 /**
  * @short Register basic modules
@@ -51,6 +52,7 @@ ModuleFactory::ModuleFactory(){
 		{"Directory",&directoryConstructor},
 		{"ActivateModule",&activateModule},
 		{"Stats",&statsConstructor},
+		{"DirList",&dirListConstructor},
 	};
 
 	for (unsigned int i=0;i<sizeof(defaultModules)/sizeof(defaultModules[0]);i++){
