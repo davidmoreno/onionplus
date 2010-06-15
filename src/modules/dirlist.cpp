@@ -52,24 +52,6 @@ QIODevice *DirList::process(Request &req,Response &res){
 	DEBUG("%s",QS(req.getPath()));
 	DEBUG("%s",QS(req.getQuery()));
 
-	if (req.getQuery()=="onion.png"){
-		DEBUG("Returning an onion");
-		QFile *f=new QFile(":onion.png");
-		res.setHeader("mime-type","image/png");
-		f->open(QIODevice::ReadOnly);
-		res.setLength(f->size());
-		return f;
-	}
-	if (req.getQuery()=="onion.css"){
-		DEBUG("Returning an onion.css");
-		QFile *f=new QFile(":onion.css");
-		res.setHeader("mime-type","text/css");
-		f->open(QIODevice::ReadOnly);
-		res.setLength(f->size());
-		res.setKeepAlive(true);
-		return f;
-	}
-
 	QDir d(basedir+req.getPath());
 	if (!(d.absolutePath()+"/").contains(basedir)){
 		ERROR("Trying to escape from allowed path! (try: %s, allowed: %s)",
@@ -95,10 +77,10 @@ QIODevice *DirList::process(Request &req,Response &res){
 
 	r->write("<html>");
 	r->write(QString("<title>%1</title>\n").arg(req.getPath()).toUtf8());
-	r->write("<style>@import url(\"/?onion.css\");</style>\n");
+	r->write("<style>@import url(\"/resources/onion.css\");</style>\n");
 	r->write(
 "<body>\n"
-"<img src=\"/?onion.png\">\n"
+"<img src=\"/resources/onion.png\">\n"
 "<div><h1>/");
 	r->write(req.getPath().toAscii());
 	r->write("</h1><table><tr class=\"header\"><th>Filename</th><th>Size</th><th>Date</th><th>Type</th></tr>\n");
