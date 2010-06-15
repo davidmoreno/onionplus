@@ -24,6 +24,7 @@
 #include "../modulefactory.h"
 #include "dirlist.h"
 #include "../onion.h"
+#include <mime.h>
 
 using namespace Onion;
 
@@ -90,12 +91,15 @@ QIODevice *DirList::process(Request &req,Response &res){
 	foreach(QFileInfo f, l){
 		QString type;
 		if (f.isDir()){
-			type="directory";
+			type="<em>directory</em>";
 			filename=f.fileName()+"/";
 		}
 		else{
-			type=f.suffix();
 			filename=f.fileName();
+			type=Mime::forFilename(filename);
+			//type=QString("<b>%1</b>/%2").arg(type.section("/",0,0)).arg(type.section("/",1,1));
+			if (type=="application/octet-stream")
+				type="<em>application/octet-stream</em>";
 		}
 		r->write(QString("<tr onclick=\"location+='%6';\"><td><a href=\"%1\">%2</a></td><td class=\"size\">%3</td><td class=\"date\">%4</td><td>%5</td></tr>\n").
 								arg(encodeURL(filename)).arg(filename).arg(f.size()).
@@ -104,7 +108,7 @@ QIODevice *DirList::process(Request &req,Response &res){
 								.toUtf8());
 	}
 
-	r->write("</table><b>(C) 2010 David Moreno Montero</b>\n");
+	r->write("</table><b class=\"c\">(C) 2010 David Moreno Montero</b>\n");
 	r->write("</div>\n</body>\n</html>\n");
 
 	res.setLength(r->pos());

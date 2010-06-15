@@ -19,6 +19,7 @@
 #include <QFile>
 #include <QBuffer>
 
+#include "mime.h"
 #include "staticfile.h"
 
 using namespace Onion;
@@ -54,11 +55,12 @@ QIODevice *StaticFile::process(Request &req,Response &res){
 		f->setFileName(":error.html");
 		f->open(QIODevice::ReadOnly);
 		res.setStatus(404);
+		res.setHeader("Content-Type", Mime::forFilename("error.html"));
 	}
+	else
+		res.setHeader("Content-Type", Mime::forFilename(filename));
 	
 	res.setHeader("Content-Length",QString::number(f->size()));
-	WARNING("Fixed content type. FIXME");
-	res.setHeader("Content-Type","text/html; charset=utf-8");
 
 	return f;
 }
