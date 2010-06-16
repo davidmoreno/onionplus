@@ -2,7 +2,8 @@
 <RCC version="1.0">
  <qresource>
    <file>onion.css</file>
-   <file>error.html</file>
    <file>onion.png</file>
+   <file>error.html</file>
+   <file>unauthorized.html</file>
  </qresource>
 </RCC>

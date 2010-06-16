@@ -36,6 +36,7 @@ Module *statsConstructor(const QStringList &,const QMap<QString,QString> &);
 Module *dirListConstructor(const QStringList &,const QMap<QString,QString> &);
 Module *allowConstructor(const QStringList &,const QMap<QString,QString> &);
 Module *resourcesConstructor(const QStringList &,const QMap<QString,QString> &);
+Module *authPAMConstructor(const QStringList &,const QMap<QString,QString> &);
 
 /**
  * @short Register basic modules
@@ -57,6 +58,7 @@ ModuleFactory::ModuleFactory(){
 		{"DirList",&dirListConstructor},
 		{"Allow",&allowConstructor},
 		{"Resources",&resourcesConstructor},
+		{"AuthPAM",&authPAMConstructor},
 	};
 
 	for (unsigned int i=0;i<sizeof(defaultModules)/sizeof(defaultModules[0]);i++){
