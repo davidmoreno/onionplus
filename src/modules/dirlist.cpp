@@ -81,7 +81,6 @@ QIODevice *DirList::process(Request &req,Response &res){
 	r->write("<style>@import url(\"/resources/onion.css\");</style>\n");
 	r->write(
 "<body>\n"
-"<img src=\"/resources/onion.png\">\n"
 "<div><h1>/");
 	r->write(req.getPath().toAscii());
 	r->write("</h1><table><tr class=\"header\"><th>Filename</th><th>Size</th><th>Date</th><th>Type</th></tr>\n");

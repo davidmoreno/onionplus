@@ -32,7 +32,7 @@ using namespace Onion;
 Client::Client(QTcpSocket *clientSocket, Daemon *daemon) : 
 											request(this), 
 											daemon(daemon), root(daemon->getRootModule()), clientSocket(clientSocket){
-	request.addHeader("Host-IP",clientSocket->peerAddress().toString());
+	request.addHeader("host-ip",clientSocket->peerAddress().toString());
 
 	atHeader=2;
 	fromModule=NULL;
@@ -105,21 +105,21 @@ void Client::processPetition(){
 	//qDebug("%s:%d processing by %s",__FILE__,__LINE__,fromModule ? fromModule->metaObject()->className() : "NULL");
 	if (!fromModule){
 		response.setStatus(500);
-		clientSocket->write(response.headerAsByteArray());
-		ERROR("Nobody could response your petition!");
-		clientSocket->write("<h1>404 - not found</h1>");
-		clientSocket->close();
-		return;
+		QFile *f=new QFile(":error.html");
+		f->open(QIODevice::ReadOnly);
+		fromModule=f;
+		response.setLength(f->size());
 	}
-	qDebug("%s %s %s (to %s (%s) from %s, %d bytes)",
+	
+	qDebug("%s %s %s %d (to %s from %s, %d bytes)",
 		QS(QDateTime::currentDateTime().toString(Qt::ISODate)),
 		QS(request.getMethod()),
 		QS(request.getFullPath()),
-		QS(request.get("Host")),
-		QS(request.get("Host-IP")),
+		response.getStatus(),
+		QS(request.get("host")),
 		QS(clientSocket->peerAddress().toString()),
 		response.getHeader("Content-Length").toInt());
-
+		
 	clientSocket->write(response.headerAsByteArray());
 
 	readAndWrite();

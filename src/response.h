@@ -51,6 +51,7 @@ namespace Onion{
 
 		QString getHeader(const QString &key){ return headers[key.toLower()]; }
 		void setStatus(int s){ status=s; }
+		int getStatus(void){ return status; }
 		unsigned long getLength(){ return length; }
 
 

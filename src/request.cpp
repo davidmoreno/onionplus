@@ -19,6 +19,7 @@
 #include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QHostAddress>
 
+#include "debug.h"
 #include "onion.h"
 #include "client.h"
 #include "request.h"
@@ -42,6 +43,7 @@ Request::~Request(){
  */
 void Request::addHeader(const QString &header){
 	//qDebug("%s:%d addheader %s (%d)",__FILE__,__LINE__,(char*)header.toUtf8().data(),headers.count());
+	//DEBUG("header: %s -",header.toAscii().constData());
 	if (method.isEmpty()){
 		GET=header;
 		QStringList spl;
@@ -66,8 +68,9 @@ void Request::addHeader(const QString &header){
 
 	QString key=header.section(':',0,0).simplified().toLower();
 	QString value=header.section(':',1,-1).simplified();
-	if (!value.isEmpty() && key!="Host-IP"){ // Unrewritable Host-IP
+	if (!value.isEmpty() && key!="host-ip"){ // Unrewritable Host-IP
 		headers[key]=value;
+		DEBUG("%s: %s", key.toAscii().constData(), value.toAscii().constData());
 		//qDebug("%s:%d new header '%s':'%s'",__FILE__,__LINE__,key.toLatin1().data(),value.toLatin1().data());
 	}
 }

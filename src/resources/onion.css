@@ -1,5 +1,7 @@
 body{
 	background: white;
+	background-image: url('/resources/onion.png');
+	background-repeat: no-repeat;
 }
 
 div{

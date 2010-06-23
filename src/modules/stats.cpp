@@ -45,10 +45,9 @@ QIODevice *Stats::process(Request &req,Response &res){
 		r->open(QBuffer::ReadWrite);
 		r->write("<html>");
 		r->write(QString("<title>%1</title>\n").arg(req.getPath()).toUtf8());
-		r->write("<style>@import url(\"/?onion.css\");</style>\n");
+		r->write("<style>@import url(\"/resources/onion.css\");</style>\n");
 		r->write(
 "<body>\n"
-"<img src=\"/?onion.png\">\n"
 "<div><h1>Stats</h1>");
 		r->write("<table>\n");
 		
