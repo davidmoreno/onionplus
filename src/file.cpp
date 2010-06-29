@@ -16,29 +16,14 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QFileInfo>
-
-#include "resources.h"
 #include "file.h"
+#include "mime.h"
 
 using namespace Onion;
 
-Module *resourcesConstructor(const QStringList &l,const QMap<QString,QString> &m){
-	if (l.count()!=0 || m.count()>0)
-		return NULL;
-	
-	return new Resources();
-}
-
-/**
- * @short Tries to open a resource by name, and if availabe, just returns it.
- */
-QIODevice *Resources::process(Request &req, Response &res){
-	QString resourceName=QString(":") + req.getPath();
-	
-	if (!QFile::exists(resourceName)){
-		return NULL;
-	}
-	File *ret=new File(resourceName, req, res);
-	return ret;
+File::File(const QString &filename, Request &req, Response &res) : QFile(filename){
+	open(QIODevice::ReadOnly);
+	res.setLength(size());
+	res.setHeader("Content-Type",Mime::forFilename(filename));
+	res.setKeepAlive(true);
 }

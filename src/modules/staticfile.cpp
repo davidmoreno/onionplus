@@ -16,10 +16,9 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QFile>
 #include <QBuffer>
 
-#include "mime.h"
+#include "file.h"
 #include "staticfile.h"
 
 using namespace Onion;
@@ -47,20 +46,14 @@ Module *staticFileConstructor(const QStringList &l,const QMap<QString,QString> &
  */
 QIODevice *StaticFile::process(Request &req,Response &res){
 	DEBUG("Open file %s",(char*)filename.toLatin1().data());
-	QFile *f=new QFile(filename);
-	f->open(QIODevice::ReadOnly);
+	File *f=new File(filename, req, res);
 	res.setStatus(errorCode);
 
 	if (!f->isOpen()){
-		f->setFileName(":error.html");
-		f->open(QIODevice::ReadOnly);
+		delete f;
+		f=new File(":404.html", req, res);
 		res.setStatus(404);
-		res.setHeader("Content-Type", Mime::forFilename("error.html"));
 	}
-	else
-		res.setHeader("Content-Type", Mime::forFilename(filename));
-	
-	res.setHeader("Content-Length",QString::number(f->size()));
 
 	return f;
 }

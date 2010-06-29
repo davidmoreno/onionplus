@@ -18,7 +18,7 @@
 #include <security/pam_appl.h>
 #include <security/pam_misc.h>
 
-#include <QFile>
+#include "../file.h"
 
 #include "authpam.h"
 #include <response.h>
@@ -57,9 +57,7 @@ QIODevice *AuthPAM::process(Request &req, Response &res){
 	if (!authorized){
 		res.setHeader("WWW-Authenticate",QString("Basic realm=\"%1\"").arg(realm));
 		res.setStatus(HTTP_UNAUTHORIZED);
-		QFile *f=new QFile(":unauthorized.html");
-		f->open(QIODevice::ReadOnly);
-		res.setLength(f->size());
+		File *f=new File(":unauthorized.html", req, res);
 		return f;
 	}
 	

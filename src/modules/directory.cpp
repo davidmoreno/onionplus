@@ -16,13 +16,13 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QFile>
 #include <QDir>
 #include <QBuffer>
 
 #include "debug.h"
 #include "onion.h"
 #include "directory.h"
+#include "file.h"
 
 using namespace Onion;
 
@@ -46,25 +46,12 @@ QIODevice *Directory::process(Request &req,Response &res){
 		return NULL;
 	}
 
-	QFile *f=new QFile(dirname+"/"+req.getPath());
-	f->open(QIODevice::ReadOnly);
+	File *f=new File(dirname+"/"+req.getPath(), req, res);
 	if (!f->isOpen()){
 		WARNING("File not found: %s %p",(char*)f->fileName().toLatin1().data(),this);
-		QBuffer *r=new QBuffer();
-		r->open(QBuffer::ReadWrite);
-		r->write("<h1>404 - File '");
-		r->write((char*)f->fileName().toLatin1().data());
-		r->write("' not fould. Check server configuration.<h1>");
-		res.setHeader("Content-Length",QString::number(r->pos()));
-		r->seek(0);
-		res.setHeader("Keep-Alive","timeout=15, max=98");
-		res.setHeader("Connection","Keep-Alive");
 		delete f;
-		
-		return r;
+		f=new File(":404.html",req, res);
 	}
-
-	res.setHeader("Content-Length",QString::number((long int)f->size()));
 
 	return f;
 }

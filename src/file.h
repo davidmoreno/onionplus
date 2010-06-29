@@ -16,29 +16,25 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QFileInfo>
+#ifndef FILE_H
+#define FILE_H
 
-#include "resources.h"
-#include "file.h"
+#include <QFile>
 
-using namespace Onion;
+#include "request.h"
+#include "response.h"
 
-Module *resourcesConstructor(const QStringList &l,const QMap<QString,QString> &m){
-	if (l.count()!=0 || m.count()>0)
-		return NULL;
-	
-	return new Resources();
+namespace Onion{
+	/**
+	 * @short Reader of a simple file from the system.
+	 *
+	 * It takes care of setting the size, mime type, and use cache if necesary (not yet).
+	 */
+	class File : public QFile
+	{
+		public:
+			File(const QString &filename, Request &req, Response &res);
+	};
 }
 
-/**
- * @short Tries to open a resource by name, and if availabe, just returns it.
- */
-QIODevice *Resources::process(Request &req, Response &res){
-	QString resourceName=QString(":") + req.getPath();
-	
-	if (!QFile::exists(resourceName)){
-		return NULL;
-	}
-	File *ret=new File(resourceName, req, res);
-	return ret;
-}
+#endif // FILE_H

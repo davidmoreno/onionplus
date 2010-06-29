@@ -26,6 +26,7 @@
 #include "response.h"
 #include "daemon.h"
 #include "module.h"
+#include "file.h"
 
 using namespace Onion;
 
@@ -105,10 +106,7 @@ void Client::processPetition(){
 	//qDebug("%s:%d processing by %s",__FILE__,__LINE__,fromModule ? fromModule->metaObject()->className() : "NULL");
 	if (!fromModule){
 		response.setStatus(500);
-		QFile *f=new QFile(":error.html");
-		f->open(QIODevice::ReadOnly);
-		fromModule=f;
-		response.setLength(f->size());
+		fromModule=new File(":error.html", request, response);
 	}
 	
 	qDebug("%s %s %s %d (to %s from %s, %d bytes)",

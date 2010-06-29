@@ -21,9 +21,10 @@
 #include <QDateTime>
 #include <QUrl>
 
-#include "../modulefactory.h"
+#include "modulefactory.h"
 #include "dirlist.h"
-#include "../onion.h"
+#include "onion.h"
+#include "file.h"
 #include <mime.h>
 
 using namespace Onion;
@@ -62,10 +63,7 @@ QIODevice *DirList::process(Request &req,Response &res){
 	if (!d.exists()){
 		// Try a file
 		if (QFile::exists(basedir+req.getPath())){
-			QFile *f=new QFile(basedir+req.getPath());
-			f->open(QIODevice::ReadOnly);
-			res.setLength(f->size());
-			res.setKeepAlive(true);
+			File *f=new File(basedir+req.getPath(), req, res);
 			return f;
 		}
 		return NULL;
