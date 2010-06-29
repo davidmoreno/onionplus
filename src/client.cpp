@@ -106,7 +106,7 @@ void Client::processPetition(){
 	//qDebug("%s:%d processing by %s",__FILE__,__LINE__,fromModule ? fromModule->metaObject()->className() : "NULL");
 	if (!fromModule){
 		response.setStatus(500);
-		fromModule=new File(":error.html", request, response);
+		fromModule=new File(":404.html", request, response);
 	}
 	
 	qDebug("%s %s %s %d (to %s from %s, %d bytes)",

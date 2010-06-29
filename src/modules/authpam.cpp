@@ -55,9 +55,9 @@ QIODevice *AuthPAM::process(Request &req, Response &res){
 		}
 	}
 	if (!authorized){
+		File *f=new File(":401.html", req, res);
 		res.setHeader("WWW-Authenticate",QString("Basic realm=\"%1\"").arg(realm));
 		res.setStatus(HTTP_UNAUTHORIZED);
-		File *f=new File(":unauthorized.html", req, res);
 		return f;
 	}
 	
