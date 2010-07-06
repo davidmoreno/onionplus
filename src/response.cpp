@@ -35,6 +35,7 @@ Response::Response(){
 	headers["date"]=QDateTime::currentDateTime().toString(Qt::ISODate);
 	//headers["Connection"]="Close";
 	//headers["Keep-Alive"]="15";
+	ignoreHeaders=false;
 }
 
 

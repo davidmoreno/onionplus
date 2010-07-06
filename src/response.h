@@ -54,7 +54,8 @@ namespace Onion{
 		int getStatus(void){ return status; }
 		unsigned long getLength(){ return length; }
 
-
+		void setIgnoreHeaders(bool ign){ ignoreHeaders=ign; }
+		bool getIgnoreHeaders(){ return ignoreHeaders; }
 		void setLength(quint64 l);
 		void setKeepAlive(bool activate);
 
@@ -63,6 +64,7 @@ namespace Onion{
 
 	protected:
 		QMap<QString,QString> headers;
+		bool ignoreHeaders;
 
 		quint64 length;
 		int status;

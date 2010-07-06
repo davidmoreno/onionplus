@@ -16,17 +16,26 @@
 		along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "file.h"
-#include "mime.h"
+#ifndef PROXY_H
+#define PROXY_H
+#include <module.h>
 
-using namespace Onion;
+namespace Onion{
 
-File::File(const QString &filename, Request &req, Response &res) : QFile(filename){
-	if (!exists()){
-		setFileName(":404.html");
-	}
-	open(QIODevice::ReadOnly);
-	res.setLength(size());
-	res.setHeader("Content-Type",Mime::forFilename(filename));
-	res.setKeepAlive(true);
+	/**
+	 * @short Do as a reverse proxy, it redirects petitions to another server
+	 */
+	class Proxy : public Module
+	{
+		public:
+			Proxy(const QString &server);
+			
+			QIODevice *process(Request &request, Response &response);
+		protected:
+			QString server;
+			int port;
+	};
+
 }
+
+#endif // PROXY_H

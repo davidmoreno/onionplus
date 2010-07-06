@@ -103,11 +103,12 @@ void Client::processPetition(){
 		fromModule=root->process(request,response);
 	}
 
-	//qDebug("%s:%d processing by %s",__FILE__,__LINE__,fromModule ? fromModule->metaObject()->className() : "NULL");
 	if (!fromModule){
 		response.setStatus(500);
 		fromModule=new File(":404.html", request, response);
 	}
+	DEBUG("Returning data with a %s",fromModule ? fromModule->metaObject()->className() : "NULL");
+	
 	
 	qDebug("%s %s %s %d (to %s from %s, %d bytes)",
 		QS(QDateTime::currentDateTime().toString(Qt::ISODate)),
@@ -117,8 +118,14 @@ void Client::processPetition(){
 		QS(request.get("host")),
 		QS(clientSocket->peerAddress().toString()),
 		response.getHeader("Content-Length").toInt());
-		
-	clientSocket->write(response.headerAsByteArray());
+	
+	if (!response.getIgnoreHeaders())
+		clientSocket->write(response.headerAsByteArray());
+
+	connect(fromModule,SIGNAL(readyRead()),
+					this,SLOT(readAndWrite()));
+	connect(fromModule,SIGNAL(disconnected()),
+					this,SLOT(deleteLater()));
 
 	readAndWrite();
 }
@@ -131,11 +138,15 @@ void Client::processPetition(){
 void Client::readAndWrite(){
 	if (!fromModule)
 		return;
+	
 	if (response.getLength()<=bytesSent){
+		DEBUG("Closed as response.getLength()<=bytesSent");
 		fromModule->close();
 	}
 
-	if (fromModule->atEnd() || !fromModule->isOpen()){ // Do nothing. Hangs this connection; maybe more petitions later.
+	// Do nothing. Hangs this connection; maybe more petitions later.
+	DEBUG("Close? %d %d %d",response.getIgnoreHeaders() , fromModule->atEnd() , fromModule->isOpen());
+	if ( (!response.getIgnoreHeaders() && fromModule->atEnd()) || !fromModule->isOpen() ){ 
 		// closes if any of these conditions
 		if (response.getHeader("content-length").isEmpty() ||        // unknown length
 				response.getHeader("connection").toLower()=="close" ||   // i forced close
@@ -153,10 +164,20 @@ void Client::readAndWrite(){
 		}
 		return;
 	}
+	if (!(fromModule->bytesAvailable()>0)){ // not ready both, wait for next ready
+		DEBUG("Not transmiting, bytesAvailable %d, bytesToWrite %d",(int)fromModule->bytesAvailable(),(int)clientSocket->bytesToWrite());
+		return;
+	}
 
 	while(clientSocket->bytesToWrite()<=0){
 		QByteArray output;
+		if (!(fromModule->bytesAvailable()>0)){ // not ready both, wait for next ready
+			DEBUG("Not transmiting, bytesAvailable %d, bytesToWrite %d",(int)fromModule->bytesAvailable(),(int)clientSocket->bytesToWrite());
+			readAndWrite();
+			return;
+		}
 		output=fromModule->read(2*1024);
 		bytesSent+=clientSocket->write(output); // buffer size should be tweakable.
+		DEBUG("Wrote %ld",bytesSent);
 	}
 }

@@ -3,7 +3,8 @@
  <qresource>
    <file>onion.css</file>
    <file>onion.png</file>
-   <file>error.html</file>
-   <file>unauthorized.html</file>
+   <file>502.html</file>
+   <file>404.html</file>
+   <file>401.html</file>
  </qresource>
 </RCC>
