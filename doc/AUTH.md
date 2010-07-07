@@ -25,8 +25,10 @@ Example auth config
 
 One example using pam_pwdfile:
 
+<pre>
    auth required pam_pwdfile.so pwdfile=/etc/onion/onion.passwd nodelay
    account    required	/lib/security/pam_pwdb.so
+</pre>
 
 It should point to a simple file with pairs of "user:password" lines. Password 
 must be created with the crypt function. htpasswd (from apache, I know...) 
@@ -34,6 +36,7 @@ should be ok for managing such files, and apache ones should be compatibles.
 
 Another example, using system accounts:
 
+<pre>
    auth    required        pam_unix.so  nodelay
    auth    required        pam_warn.so 
    account required        pam_unix.so 
@@ -42,4 +45,4 @@ Another example, using system accounts:
    password        required        pam_warn.so 
    session required        pam_unix.so 
    session required        pam_warn.so
-
+</pre>
