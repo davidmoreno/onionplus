@@ -1,6 +1,9 @@
 The Onion+ Web Server
 =====================
 
+**This is a development web server!! Do not use on production or even connected
+to the internet!! It has not been thoughfully tested.**
+
 The Onion+ web server is a web server developed in C++ with extensibility in 
 mind. It features an internal path mechanism that remembers an onion (ok, 
 actually its a tree, like all other web servers, but the configuration enforces 
